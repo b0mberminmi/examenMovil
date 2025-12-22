@@ -1,18 +1,18 @@
-# Evaluación 3 - Desarrollo Móvil — TODO List
+# Examen Final - Desarrollo Móvil — TODO List
 
 Aplicación de lista de tareas (TODO) desarrollada con React Native + Expo y TypeScript que se conecta a una API backend externa. Implementa gestión completa de tareas con captura de fotos, ubicación GPS, edición de tareas y autenticación de usuarios.
-Proyecto creado como parte de la Evaluación 3 del curso de Desarrollo de Aplicaciones Móviles.
+Proyecto creado como parte del **Examen Final** del curso de Desarrollo de Aplicaciones Móviles.
 
 # Video Explicativo
 
-- [Ver video explicativo en YouTube](https://youtu.be/StnTmLiDNwM?si=4MjswExMO4bPt1Fw)
+- [Ver video explicativo en YouTube] 
 
 
 ## Características
 
 - **Autenticación con API backend**: Login y registro de nuevos usuarios contra servidor externo con JWT.
 - **Gestión completa de tareas**: Crear, editar, completar y eliminar tareas.
-- **Captura de fotos**: Tomar fotos con la cámara del dispositivo e incluirlas en las tareas.
+- **Captura y subida de fotos**: Tomar fotos con la cámara, subirlas autenticado a la API y adjuntar la URL devuelta a la tarea.
 - **Ubicación GPS**: Capturar coordenadas de ubicación automáticamente al tomar fotos.
 - **Visor de tareas**: Mostrar fotos y coordenadas de ubicación en la lista de tareas.
 - **Edición de tareas**: Modificar el título de tareas existentes mediante modal dedicado.
@@ -114,6 +114,7 @@ npx expo start
 
 ### Captura Multimedia
 - Botón para capturar fotos con la cámara
+- Subida autenticada de la imagen a la API y uso de la URL devuelta en la tarea
 - Obtención automática de ubicación GPS después de capturar
 - Vista previa de foto antes de crear/editar
 - Visualización de fotos en la lista de tareas
@@ -122,22 +123,32 @@ npx expo start
 ## Estructura principal del proyecto
 
 ```
-app/                # Pantallas y navegación (Expo Router)
+app/                  # Pantallas y navegación (Expo Router)
     _layout.tsx
-    index.tsx         # Login
-    register.tsx      # Registro
-    modal.tsx         # Crear tarea (foto+ubicación)
-    edit-modal.tsx    # Editar tarea
-    (tabs)/           # Tabs: tareas y perfil
+    index.tsx           # Login
+    register.tsx        # Registro
+    modal.tsx           # Crear tarea (foto+ubicación)
+    edit-modal.tsx      # Editar tarea
+    LogoutButton.tsx
+    (tabs)/             # Tabs: tareas y perfil
+        _layout.tsx
+        todos.tsx
+        profile.tsx
 
-components/         # UI y utilidades
+components/           # UI y utilidades
     TodoForm.tsx
     TodoItem.tsx
+    StyledText.tsx
+    EditScreenInfo.tsx
+    ExternalLink.tsx
+    Themed.tsx
     context/auth-context.tsx
 
-services/           # Clientes HTTP
+services/             # Clientes HTTP
     auth-services.ts
     todo-services.ts
+    image-services.ts
+    image-upload-service.ts
 
 hooks/
     useTodos.ts
@@ -151,9 +162,12 @@ constants/
 
 assets/
     images/
+    fonts/
 
 package.json
+package-lock.json
 tsconfig.json
+app.json
 .env.local (local)
 README.md
 ```

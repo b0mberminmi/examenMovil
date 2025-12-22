@@ -19,29 +19,39 @@ export default function getImageService({ token }: { token: string }) {
     },
   });
 
-  async function uploadImage(imageUri: string): Promise<string> {
+  async function uploadImage(image: string | FormData): Promise<string> {
     try {
-      const formData = new FormData();
-      
-      // Obtener el nombre y tipo del archivo
-      const filename = imageUri.split('/').pop() || 'image.jpg';
-      const match = /\.(\w+)$/.exec(filename);
-      const type = match ? `image/${match[1]}` : 'image/jpeg';
+      let formData: FormData;
+      if (typeof image === 'string') {
+        formData = new FormData();
+        // Obtener el nombre y tipo del archivo
+        const filename = image.split('/').pop() || 'image.jpg';
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : 'image/jpeg';
 
-      console.log('Intentando subir imagen:', { filename, type, baseURL: client.defaults.baseURL });
+        console.log('Intentando subir imagen (string):', { filename, type, baseURL: client.defaults.baseURL });
 
-      // Intentar con campo "file" primero (el más común)
-      formData.append('file', {
-        uri: imageUri,
-        name: filename,
-        type: type,
-      } as any);
+        // Campo "file" por compatibilidad
+        formData.append('file', {
+          uri: image,
+          name: filename,
+          type: type,
+        } as any);
+      } else {
+        // Ya viene armado desde el cliente (posible campo 'image')
+        formData = image;
+        console.log('Intentando subir imagen (FormData provisto)');
+      }
 
       // POST directo a /images (axios no concatenará baseURL si la ruta comienza con /)
       const response = await client.post<ImageResponse>('/images', formData, {
         maxContentLength: 5 * 1024 * 1024, // 5MB máximo
         maxBodyLength: 5 * 1024 * 1024,
         timeout: 30000, // 30 segundos timeout
+        headers: {
+          // Dejar que axios/RN construya el boundary automáticamente
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       console.log('Respuesta exitosa de carga de imagen:', response.data);

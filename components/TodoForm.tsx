@@ -12,6 +12,8 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
 import * as Location from 'expo-location';
+import getImageService from '@/services/image-services';
+import { useAuth } from './context/auth-context';
 
 const NEON_GREEN = '#00FF00';
 const INACTIVE_NEON = '#006600';
@@ -36,6 +38,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ onCreateTodo }) => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const { user } = useAuth();
 
   const handlePickImage = async () => {
     try {
@@ -48,8 +51,25 @@ const TodoForm: React.FC<TodoFormProps> = ({ onCreateTodo }) => {
 
 
       if (!result.canceled && result.assets[0]) {
-        const photoAsBlob = await fetch(result.assets[0].uri).then(res => res.blob());
-        setPhotoUri(result.assets[0].uri);
+        if (!user?.token) {
+          Alert.alert('Sesión requerida', 'Inicia sesión para subir imágenes.');
+          return;
+        }
+        const imageUploadService = getImageService({token: user.token});
+        const formData = new FormData();
+        const uriParts = result.assets[0].uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+
+        formData.append('image', {
+          uri: result.assets[0].uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        } as any);
+
+        const uploadedImageUrl = await imageUploadService.uploadImage(formData);
+
+
+        setPhotoUri(uploadedImageUrl);
         // Obtener ubicación después de capturar la foto
         await handleGetLocation();
       }
