@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -11,39 +11,20 @@ import {
 } from 'react-native';
 import { getCurrentUser, isValidEmail } from '../constants/auth';
 import { useAuth } from '../components/context/auth-context';
-import getTodoService from '../services/todo-services';
+import useTodos from '../hooks/useTodos'; // Uso del hook en vez del service
 
 export default function LoginScreen() {
   const router = useRouter();
   const { login, user } = useAuth();
+  const token = user?.token;
+  const { reload, error } = useTodos(token); // Consumir el hook
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [isLoadingTodos, setIsLoadingTodos] = useState(false);
-
-  const fetchTodos = useCallback(async () => {
-    if (!user) return;
-    setIsLoadingTodos(true);
-    try {
-      const todoService = getTodoService({ token: user.token });
-      const todosResponse = await todoService.getTodos();
-      console.log('Tareas precargadas:', todosResponse.count);
-      // Redirigir a la pantalla de todos después de cargar
-      router.replace('/(tabs)/todos');
-    } catch (err) {
-      console.error('Error al cargar tareas:', err);
-      Alert.alert(
-        'Error',
-        'No se pudieron cargar las tareas. Intenta nuevamente.'
-      );
-      // Aún así redirigir, las tareas se cargarán en la pantalla de todos
-      router.replace('/(tabs)/todos');
-    } finally {
-      setIsLoadingTodos(false);
-    }
-  }, [user, router]);
 
   // Restaurar sesión si ya hay un usuario autenticado
   useEffect(() => {
@@ -74,40 +55,52 @@ export default function LoginScreen() {
 
   // Cargar tareas cuando el usuario inicia sesión
   useEffect(() => {
-    if (user && !isCheckingSession) {
-      fetchTodos();
-    }
-  }, [user, isCheckingSession, fetchTodos]);
+    const loadTodos = async () => {
+      if (user && !isCheckingSession) {
+        setIsLoadingTodos(true);
+        try {
+          await reload(); // Uso del hook para recargar tareas
+          router.replace('/(tabs)/todos');
+        } catch (err) {
+          console.error('Error al cargar tareas:', err);
+          Alert.alert('Error', 'No se pudieron cargar las tareas. Intenta nuevamente.');
+          router.replace('/(tabs)/todos');
+        } finally {
+          setIsLoadingTodos(false);
+        }
+      }
+    };
+
+    loadTodos();
+  }, [user, isCheckingSession, reload, router]);
 
   const handleLogin = async () => {
-    setError('');
+    setErrorMsg('');
 
     if (!isValidEmail(email)) {
-      setError('Ingresa un email válido.');
+      setErrorMsg('Ingresa un email válido.');
       return;
     }
 
     if (!password) {
-      setError('Ingresa tu contraseña.');
+      setErrorMsg('Ingresa tu contraseña.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Usar la API real en lugar de autenticación local
       const success = await login(email.trim(), password.trim());
 
       if (!success) {
-        setError('Credenciales incorrectas.');
+        setErrorMsg('Credenciales incorrectas.');
         return;
       }
 
-      // Navegar a la pantalla de todos
       router.replace('/(tabs)/todos');
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
-      setError((err as Error).message || 'No se pudo iniciar sesión. Intenta nuevamente.');
+      setErrorMsg((err as Error).message || 'No se pudo iniciar sesión. Intenta nuevamente.');
     } finally {
       setIsSubmitting(false);
     }
@@ -149,6 +142,7 @@ export default function LoginScreen() {
         onChangeText={setPassword}
       />
 
+      {errorMsg ? <Text style={styles.errorText}>{errorMsg}</Text> : null}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
       <TouchableOpacity
