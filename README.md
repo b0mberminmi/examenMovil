@@ -3,11 +3,15 @@
 Aplicación de lista de tareas (TODO) desarrollada con React Native + Expo y TypeScript que se conecta a una API backend externa. Implementa gestión completa de tareas con captura de fotos, ubicación GPS, edición de tareas y autenticación de usuarios.
 Proyecto creado como parte del **Examen Final** del curso de Desarrollo de Aplicaciones Móviles.
 
-# Videos Explicativos
+# Video de preguntas teóricas y demostrativo
 
-- [Ver video demo APP](https://youtu.be/HsFJJSNsSqU)
+- [Ver video demostrativo](https://youtu.be/HsFJJSNsSqU)
 
-
+**Preguntas teóricas**
+- 1. [¿Qué es un estado en React y cómo funciona? - Sebastián Masferrer]() PENDIENTE
+- 2. [¿Qué significa que la aplicación sea nativa? - Loretto Herrera](https://youtu.be/IuSMc7ylMzM) 
+- 3. [¿Qué es un servicio REST y cómo nos autenticamos a él? - Luciano Lopresti](https://youtu.be/0u8ENMXDZtQ?si=tVFAz-RwltaXkHNW) 
+- 4. [¿Cómo funcionan los hooks en React y cómo se crea un custom hook? - Víctor Mella](https://youtu.be/J09IJG7IFZI)
 
 ## Características
 
