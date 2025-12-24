@@ -213,6 +213,21 @@ coinciden.
 
 <img src="/assets/images/post-cel.jpeg" width="450px" height="750px">
 
+ **cambio**
+Se implementó el almacenamiento de foto en servidor externo.
+1. Se crea una tarea
+![Creando tarea](/assets/images/crea_tarea.jpeg)
+2. Se toma la fotografía
+![Capturando foto](/assets/images/toma_foto.jpeg)
+3. Se registra la ubicación y se crea la tarea
+![Ubicación y foto](/assets/images/foto_ubicacion.jpeg)
+4. Se listan las tareas
+![Todo](/assets/images/todo_list_ok.jpeg)
+5. Se ejecuta el método GET Todo en Swagger y se toma la URL de la imagen
+![Todo en Swagger](/assets/images/to_do_list.png)
+6. Se ve la url y se verifica que es la misma foto que fue capturada desde el dispositivo
+![Imagen servidor](/assets/images/imagen_servidor.png)
+
 
 Ahora continuamos con la demostración del método PATCH, el cual en este caso lo usamos para actualizar el título
 de la tarea. Dentro de nuestra misma app este método se utiliza para actualizar el mismo título como tal o 
