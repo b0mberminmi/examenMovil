@@ -213,18 +213,23 @@ coinciden.
 
 <img src="/assets/images/post-cel.jpeg" width="450px" height="750px">
 
- **cambio**
+ **CAMBIO**
 Se implementó el almacenamiento de foto en servidor externo.
 1. Se crea una tarea
-![Creando tarea](/assets/images/crea_tarea.jpeg)
+<img src="/assets/images/crea_tarea.jpeg" width="450px" height="750px">
+
 2. Se toma la fotografía
-![Capturando foto](/assets/images/toma_foto.jpeg)
+<img src="/assets/images/toma_foto.jpeg" width="450px" height="750px">
+
 3. Se registra la ubicación y se crea la tarea
-![Ubicación y foto](/assets/images/foto_ubicacion.jpeg)
+<img src="/assets/images/foto_ubicacion.jpeg" width="450px" height="750px">
+
 4. Se listan las tareas
-![Todo](/assets/images/todo_list_ok.jpeg)
+<img src="/assets/images/todo_list_ok.jpeg" width="450px" height="750px">
+
 5. Se ejecuta el método GET Todo en Swagger y se toma la URL de la imagen
 ![Todo en Swagger](/assets/images/to_do_list.png)
+
 6. Se ve la url y se verifica que es la misma foto que fue capturada desde el dispositivo
 ![Imagen servidor](/assets/images/imagen_servidor.png)
 
