@@ -8,7 +8,7 @@ Proyecto creado como parte del **Examen Final** del curso de Desarrollo de Aplic
 - [Ver video demostrativo](https://youtu.be/HsFJJSNsSqU)
 
 **Preguntas teóricas**
-- 1. [¿Qué es un estado en React y cómo funciona? - Sebastián Masferrer]() PENDIENTE
+- 1. [¿Qué es un estado en React y cómo funciona? - Sebastián Masferrer](https://youtu.be/g1bfEe_jC50)
 - 2. [¿Qué significa que la aplicación sea nativa? - Loretto Herrera](https://youtu.be/IuSMc7ylMzM) 
 - 3. [¿Qué es un servicio REST y cómo nos autenticamos a él? - Luciano Lopresti](https://youtu.be/0u8ENMXDZtQ?si=tVFAz-RwltaXkHNW) 
 - 4. [¿Cómo funcionan los hooks en React y cómo se crea un custom hook? - Víctor Mella](https://youtu.be/J09IJG7IFZI)
